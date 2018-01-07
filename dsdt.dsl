@@ -8638,85 +8638,33 @@ DefinitionBlock ("", "DSDT", 2, "ALASKA", "A M I ", 0x00000004)
                 PSAT,   32
             }
 
-            Device (BTH0)
+            Device (GPS0)
             {
-                Name (_HID, "BCM2E3A")  // _HID: Hardware ID
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (0x0F)
-                }
-
+                Name (_HID, "BCM4752")  // _HID: Hardware ID
+                Name (UART, One)
+                Name (ENAB, Zero)
                 Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
                 {
                     Name (UBUF, ResourceTemplate ()
                     {
                         UartSerialBusV2 (0x0001C200, DataBitsEight, StopBitsOne,
-                            0xFC, LittleEndian, ParityTypeNone, FlowControlNone,
+                            0xFC, LittleEndian, ParityTypeNone, FlowControlHardware,
                             0x0020, 0x0020, "\\_SB.URT1",
                             0x00, ResourceConsumer, , Exclusive,
                             )
-                        Interrupt (ResourceConsumer, Edge, ActiveHigh, ExclusiveAndWake, ,, )
-                        {
-                            0x00000046,
-                        }
                         GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
                             "\\_SB.GPO0", 0x00, ResourceConsumer, ,
                             )
                             {   // Pin list
-                                0x0034
-                            }
-                        GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
-                            "\\_SB.GPO2", 0x00, ResourceConsumer, ,
-                            )
-                            {   // Pin list
-                                0x0009
-                            }
-                        GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
-                            "\\_SB.GPO2", 0x00, ResourceConsumer, ,
-                            )
-                            {   // Pin list
-                                0x0011
+                                0x0001
                             }
                     })
-                    Name (PBUF, ResourceTemplate ()
-                    {
-                        UartSerialBusV2 (0x0001C200, DataBitsEight, StopBitsOne,
-                            0xFC, LittleEndian, ParityTypeNone, FlowControlNone,
-                            0x0020, 0x0020, "\\_SB.URT1",
-                            0x00, ResourceConsumer, , Exclusive,
-                            )
-                        Interrupt (ResourceConsumer, Edge, ActiveHigh, ExclusiveAndWake, ,, )
-                        {
-                            0x00000046,
-                        }
-                        GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
-                            "\\_SB.GPO0", 0x00, ResourceConsumer, ,
-                            )
-                            {   // Pin list
-                                0x0034
-                            }
-                        GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
-                            "\\_SB.GPO2", 0x00, ResourceConsumer, ,
-                            )
-                            {   // Pin list
-                                0x0009
-                            }
-                        GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
-                            "\\_SB.GPO2", 0x00, ResourceConsumer, ,
-                            )
-                            {   // Pin list
-                                0x0011
-                            }
-                    })
-                    If ((BDID == 0x04))
-                    {
-                        If ((FBID == Zero))
-                        {
-                            Return (PBUF) /* \_SB_.URT1.BTH0._CRS.PBUF */
-                        }
-                    }
+                    Return (UBUF) /* \_SB_.URT1.GPS0._CRS.UBUF */
+                }
 
-                    Return (UBUF) /* \_SB_.URT1.BTH0._CRS.UBUF */
+                Method (_STA, 0, NotSerialized)  // _STA: Status
+                {
+                    Return (0x0F)
                 }
             }
 
@@ -8876,33 +8824,85 @@ DefinitionBlock ("", "DSDT", 2, "ALASKA", "A M I ", 0x00000004)
                 PSAT,   32
             }
 
-            Device (GPS0)
+            Device (BTH0)
             {
-                Name (_HID, "BCM4752")  // _HID: Hardware ID
-                Name (UART, One)
-                Name (ENAB, Zero)
+                Name (_HID, "BCM2E3A")  // _HID: Hardware ID
+                Method (_STA, 0, NotSerialized)  // _STA: Status
+                {
+                    Return (0x0F)
+                }
+
                 Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
                 {
                     Name (UBUF, ResourceTemplate ()
                     {
                         UartSerialBusV2 (0x0001C200, DataBitsEight, StopBitsOne,
-                            0xFC, LittleEndian, ParityTypeNone, FlowControlHardware,
+                            0xFC, LittleEndian, ParityTypeNone, FlowControlNone,
                             0x0020, 0x0020, "\\_SB.URT2",
                             0x00, ResourceConsumer, , Exclusive,
                             )
+                        Interrupt (ResourceConsumer, Edge, ActiveHigh, ExclusiveAndWake, ,, )
+                        {
+                            0x00000046,
+                        }
                         GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
                             "\\_SB.GPO0", 0x00, ResourceConsumer, ,
                             )
                             {   // Pin list
-                                0x0001
+                                0x0034
+                            }
+                        GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
+                            "\\_SB.GPO2", 0x00, ResourceConsumer, ,
+                            )
+                            {   // Pin list
+                                0x0009
+                            }
+                        GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
+                            "\\_SB.GPO2", 0x00, ResourceConsumer, ,
+                            )
+                            {   // Pin list
+                                0x0011
                             }
                     })
-                    Return (UBUF) /* \_SB_.URT2.GPS0._CRS.UBUF */
-                }
+                    Name (PBUF, ResourceTemplate ()
+                    {
+                        UartSerialBusV2 (0x0001C200, DataBitsEight, StopBitsOne,
+                            0xFC, LittleEndian, ParityTypeNone, FlowControlNone,
+                            0x0020, 0x0020, "\\_SB.URT2",
+                            0x00, ResourceConsumer, , Exclusive,
+                            )
+                        Interrupt (ResourceConsumer, Edge, ActiveHigh, ExclusiveAndWake, ,, )
+                        {
+                            0x00000046,
+                        }
+                        GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
+                            "\\_SB.GPO0", 0x00, ResourceConsumer, ,
+                            )
+                            {   // Pin list
+                                0x0034
+                            }
+                        GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
+                            "\\_SB.GPO2", 0x00, ResourceConsumer, ,
+                            )
+                            {   // Pin list
+                                0x0009
+                            }
+                        GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
+                            "\\_SB.GPO2", 0x00, ResourceConsumer, ,
+                            )
+                            {   // Pin list
+                                0x0011
+                            }
+                    })
+                    If ((BDID == 0x04))
+                    {
+                        If ((FBID == Zero))
+                        {
+                            Return (PBUF) /* \_SB_.URT2.BTH0._CRS.PBUF */
+                        }
+                    }
 
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (0x0F)
+                    Return (UBUF) /* \_SB_.URT2.BTH0._CRS.UBUF */
                 }
             }
         }
