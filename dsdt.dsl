@@ -8841,10 +8841,6 @@ DefinitionBlock ("", "DSDT", 2, "ALASKA", "A M I ", 0x00000004)
                             0x0020, 0x0020, "\\_SB.URT2",
                             0x00, ResourceConsumer, , Exclusive,
                             )
-                        Interrupt (ResourceConsumer, Edge, ActiveHigh, ExclusiveAndWake, ,, )
-                        {
-                            0x00000046,
-                        }
                         GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
                             "\\_SB.GPO0", 0x00, ResourceConsumer, ,
                             )
@@ -8871,10 +8867,6 @@ DefinitionBlock ("", "DSDT", 2, "ALASKA", "A M I ", 0x00000004)
                             0x0020, 0x0020, "\\_SB.URT2",
                             0x00, ResourceConsumer, , Exclusive,
                             )
-                        Interrupt (ResourceConsumer, Edge, ActiveHigh, ExclusiveAndWake, ,, )
-                        {
-                            0x00000046,
-                        }
                         GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
                             "\\_SB.GPO0", 0x00, ResourceConsumer, ,
                             )
