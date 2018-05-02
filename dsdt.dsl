@@ -5442,6 +5442,17 @@ DefinitionBlock ("", "DSDT", 2, "ALASKA", "A M I ", 0x00000004)
                 GpioIo (Exclusive, PullDefault, 0, 0, IoRestrictionOutputOnly, "\\_SB.GPO0") {54} /* cs */
             })
 
+            // Eye diagram optimization according to platform_usb_otg.c
+            // (Bay Trail FFRD-8 PR0) => 0x4f
+            Name (_DSD, Package () {
+                ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                Package () {
+                    Package () {"ihstx", 0xf},
+                    Package () {"zhsdrv", 0x0},
+                    Package () {"datapolarity", 0x1},
+                }
+            })
+
             Method (_STA, 0, NotSerialized)  // _STA: Status
             {
                 If ((OTGM != Zero))
