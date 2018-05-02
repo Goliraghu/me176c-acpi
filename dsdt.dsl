@@ -5466,6 +5466,15 @@ DefinitionBlock ("", "DSDT", 2, "ALASKA", "A M I ", 0x00000004)
             }
         }
 
+        Device (OTG2) {
+            Name (_HID, "INT3496")  // _HID: Hardware ID
+            Name (_CID, "INT3496")  // _CID: Compatible ID
+            Name (_STA, 0xf)  // _STA: Status
+            Name (_CRS, ResourceTemplate () {  // _CRS: Current Resource Settings
+                GpioIo (Exclusive, PullDefault, 0, 0, IoRestrictionInputOnly, "\\_SB.GPO2") {0x16} /* id */
+            })
+        }
+
         Device (GLAN)
         {
             Name (_ADR, 0x00190000)  // _ADR: Address
