@@ -5442,11 +5442,16 @@ DefinitionBlock ("", "DSDT", 2, "ALASKA", "A M I ", 0x00000004)
                 GpioIo (Exclusive, PullDefault, 0, 0, IoRestrictionOutputOnly, "\\_SB.GPO0") {54} /* cs */
             })
 
-            // Eye diagram optimization according to platform_usb_otg.c
-            // (Bay Trail FFRD-8 PR0) => 0x4f
             Name (_DSD, Package () {
+                // Device properties
                 ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
                 Package () {
+                    Package () {"dr_mode", "otg"}, /* OTG dual role mode */
+                    Package () {"extcon-name", "INT3496:00"},
+                    Package () {"extcon-vbus-name", "crystal_cove_pwrsrc"},
+
+                    // Eye diagram optimization according to platform_usb_otg.c
+                    // (Bay Trail FFRD-8 PR0) => 0x4f
                     Package () {"ihstx", 0xf},
                     Package () {"zhsdrv", 0x0},
                     Package () {"datapolarity", 0x1},
@@ -10881,10 +10886,11 @@ DefinitionBlock ("", "DSDT", 2, "ALASKA", "A M I ", 0x00000004)
                     Return (ABUF) /* \_SB_.I2C6.GDIX._CRS.ABUF */
                 }
 
-                // Define GPIO names
                 Name (_DSD, Package () {
+                    // Device properties
                     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
                     Package () {
+                        // Define GPIO names
                         Package () {"reset-gpios", Package () {^GDIX, 0, 0, 0}},
                         Package () {"irq-gpios", Package () {^GDIX, 1, 0, 0}},
                     }
@@ -12548,14 +12554,11 @@ DefinitionBlock ("", "DSDT", 2, "ALASKA", "A M I ", 0x00000004)
             Name (_HID, "TIBQ2419")  // _HID: Hardware ID
             Name (_CID, "TIBQ2419")  // _CID: Compatible ID
             Name (_DDN, "BQ24192")  // _DDN: DOS Device Name
+            Name (_STA, 0xf)  // _STA: Status
 
             Name (_CRS, ResourceTemplate () {  // _CRS: Current Resource Settings
                 I2cSerialBusV2 (0x6b, ControllerInitiated, 100000, AddressingMode7Bit, "\\_SB.I2C1")
             })
-
-            Method (_STA) {  // _STA: Status
-                Return (0xf)
-            }
         }
 
         Name (UMPC, ResourceTemplate ()
