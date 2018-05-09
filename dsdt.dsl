@@ -5446,8 +5446,6 @@ DefinitionBlock ("", "DSDT", 2, "ALASKA", "A M I ", 0x00000004)
                 // Device properties
                 ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
                 Package () {
-                    Package () {"dr_mode", "otg"}, /* OTG dual role mode */
-                    Package () {"extcon-name", "INT3496:00"},
                     Package () {"extcon-vbus-name", "crystal_cove_pwrsrc"},
 
                     // Eye diagram optimization according to platform_usb_otg.c
