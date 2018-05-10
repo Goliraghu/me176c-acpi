@@ -5025,63 +5025,6 @@ DefinitionBlock ("", "DSDT", 2, "ALASKA", "A M I ", 0x00000004)
                 Device (HS03)
                 {
                     Name (_ADR, 0x03)  // _ADR: Address
-                    Name (_DEP, Package (0x01)  // _DEP: Dependencies
-                    {
-                        GPO2
-                    })
-                    Name (PSTS, Zero)
-                    PowerResource (WWPR, 0x00, 0x0000)
-                    {
-                        Name (_DEP, Package (0x01)  // _DEP: Dependencies
-                        {
-                            GPO2
-                        })
-                        Method (_STA, 0, NotSerialized)  // _STA: Status
-                        {
-                            If ((\_SB.GPO2.AVBL == One))
-                            {
-                                Return (\_SB.GPO2.WWD3)
-                            }
-
-                            Return (Zero)
-                        }
-
-                        Method (_ON, 0, NotSerialized)  // _ON_: Power On
-                        {
-                            If ((PSTS == Zero))
-                            {
-                                If ((\_SB.GPO2.AVBL == One))
-                                {
-                                    Sleep (0x0200)
-                                    \_SB.GPO2.WWD3 = One
-                                    PSTS = One
-                                }
-                            }
-                        }
-
-                        Method (_OFF, 0, NotSerialized)  // _OFF: Power Off
-                        {
-                            If ((\_SB.GPO2.AVBL == One))
-                            {
-                                \_SB.GPO2.WWD3 = Zero
-                                PSTS = Zero
-                            }
-                        }
-                    }
-
-                    Name (_S0W, 0x02)  // _S0W: S0 Device Wake State
-                    Name (_PR0, Package (0x01)  // _PR0: Power Resources for D0
-                    {
-                        WWPR
-                    })
-                    Name (_PR2, Package (0x01)  // _PR2: Power Resources for D2
-                    {
-                        WWPR
-                    })
-                    Name (_PR3, Package (0x01)  // _PR3: Power Resources for D3hot
-                    {
-                        WWPR
-                    })
                     Method (_UPC, 0, Serialized)  // _UPC: USB Port Capabilities
                     {
                         Name (UPCP, Package (0x04)
@@ -5141,23 +5084,6 @@ DefinitionBlock ("", "DSDT", 2, "ALASKA", "A M I ", 0x00000004)
                         }
 
                         Return (Zero)
-                    }
-
-                    Device (MODM)
-                    {
-                        Name (_ADR, 0x03)  // _ADR: Address
-                        Name (_PR0, Package (0x01)  // _PR0: Power Resources for D0
-                        {
-                            WWPR
-                        })
-                        Name (_PR2, Package (0x01)  // _PR2: Power Resources for D2
-                        {
-                            WWPR
-                        })
-                        Name (_PR3, Package (0x01)  // _PR3: Power Resources for D3hot
-                        {
-                            WWPR
-                        })
                     }
                 }
 
