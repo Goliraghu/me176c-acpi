@@ -9140,7 +9140,7 @@ DefinitionBlock ("", "DSDT", 2, "ALASKA", "A M I ", 0x00000004)
                             "\\_SB.GPO2", 0x00, ResourceConsumer, ,
                             )
                             {   // Pin list
-                                0x0009
+                                0x0004
                             }
                         GpioIo (Exclusive, PullDown, 0x0000, 0x0000, IoRestrictionOutputOnly,
                             "\\_SB.GPO2", 0x00, ResourceConsumer, ,
