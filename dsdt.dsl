@@ -6772,6 +6772,34 @@ DefinitionBlock ("", "DSDT", 2, "ALASKA", "A M I ", 0x00000004)
                 Return (0x0F)
             }
 
+            /*
+             * Some of the GPIOs are incorrectly configured by the BIOS.
+             * For example, the accelerometer interrupt GPIO has direct_irq_en
+             * enabled, mapping it to a IOAPIC IRQ, but it is neither listed
+             * in this DSDT nor working correctly.
+             *
+             * In newer kernels, the pinctrl driver disables GPIO IRQs if
+             * direct_irq_en is enabled, so we need to disable it to
+             * make it work properly again.
+             *
+             * This works by writing to the memory address that contains the
+             * GPIO pin pad configuration.
+             */
+            Method (_INI) {  // _INI: Initialize
+                OperationRegion(PAD, SystemMemory, 0xFED0E000, 0x1000)
+                Field(PAD, DWordAcc, NoLock, Preserve) {
+                    Offset(0x180), // pin 28 (touchscreen)
+                    , 27, DI28, 1, // direct_irq_en
+
+                    Offset(0x1f0), // pin 3 (accelerometer)
+                    , 27, DI3 , 1, // direct_irq_en
+                }
+
+                // Disable direct_irq_en
+                DI3  = 0  // KXJ2109 uses GpioInt instead of direct IRQ
+                DI28 = 0  // See GDIX1001 device
+            }
+
             Method (_AEI, 0, NotSerialized)  // _AEI: ACPI Event Interrupts
             {
                 Name (RBUF, ResourceTemplate ()
@@ -10795,6 +10823,7 @@ DefinitionBlock ("", "DSDT", 2, "ALASKA", "A M I ", 0x00000004)
                     GPO2,
                     GPO1
                 })
+
                 Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
                 {
                     Name (ABUF, ResourceTemplate ()
@@ -10803,17 +10832,38 @@ DefinitionBlock ("", "DSDT", 2, "ALASKA", "A M I ", 0x00000004)
                             AddressingMode7Bit, "\\_SB.I2C6",
                             0x00, ResourceConsumer, , Exclusive,
                             )
+
+                        /*
+                         * Avoid using direct IRQ for the touchscreen.
+                         * It causes frequent kernel warnings
+                         *     "Setting GPIO with direct_irq_en to output"
+                         * during suspend because the driver temporarily sets
+                         * the underlying GPIO to output.
+                         */
+                        /*
                         Interrupt (ResourceConsumer, Edge, ActiveLow, Exclusive, ,, )
                         {
                             0x00000045,
                         }
-                        GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
+                        */
+
+                        /*
+                         * Use the underlying GPIO directly as interrupt to
+                         * avoid the kernel warnings.
+                         *
+                         * Note: The IRQ GPIO is listed twice here, once as
+                         * GpioInt and once as GpioIo. The first is used for
+                         * interrupts, but cannot be set to output. The second
+                         * is used for the reset mechanism of the touchscreen.
+                         */
+                        GpioInt (Edge, ActiveLow, Exclusive, PullDefault, 0, "\\_SB.GPO2") {28}
+                        GpioIo (Exclusive, PullDefault, 0, 0, IoRestrictionNone, "\\_SB.GPO2") {28}
+                        GpioIo (Exclusive, PullDefault, 0, 0, IoRestrictionNone,
                             "\\_SB.GPO0", 0x00, ResourceConsumer, ,
                             )
                             {   // Pin list
                                 0x003C
                             }
-                        GpioIo (Exclusive, PullDefault, 0, 0, IoRestrictionOutputOnly, "\\_SB.GPO2") {28}
                     })
                     Return (ABUF) /* \_SB_.I2C6.GDIX._CRS.ABUF */
                 }
@@ -10823,8 +10873,8 @@ DefinitionBlock ("", "DSDT", 2, "ALASKA", "A M I ", 0x00000004)
                     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
                     Package () {
                         // Define GPIO names
-                        Package () {"reset-gpios", Package () {^GDIX, 0, 0, 0}},
                         Package () {"irq-gpios", Package () {^GDIX, 1, 0, 0}},
+                        Package () {"reset-gpios", Package () {^GDIX, 2, 0, 0}},
                     }
                 })
 
