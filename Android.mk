@@ -10,5 +10,6 @@ LOCAL_DSL_FILE := dsdt.dsl
 include $(BUILD_SYSTEM)/base_rules.mk
 $(LOCAL_BUILT_MODULE): $(LOCAL_PATH)/$(LOCAL_DSL_FILE) $(IASL)
 	$(IASL) -p $(basename $@) -tc $<
+	sed -i s/dsdt_aml_code/AmlCode/ $@
 
 BUILT_ACPI_DSDT_TABLE := $(LOCAL_BUILT_MODULE)
