@@ -8624,11 +8624,22 @@ DefinitionBlock ("", "DSDT", 2, "ALASKA", "A M I ", 0x00000004)
                 {
                     Name (UBUF, ResourceTemplate ()
                     {
+                        /*
+                         * TODO: It is unlikely that this is actually correct information.
+                         * The stock ROM wires GPS communication through the Bluetooth
+                         * HAL, instead through an extra serial interface.
+                         * (See https://github.com/me176c-dev/android_device_asus_K013/issues/48)
+                         *
+                         * This is disabled here so Linux loads rfkill-gpio
+                         * for GPS to make sure it is turned off propertly.
+                         */
+                        /*
                         UartSerialBusV2 (0x0001C200, DataBitsEight, StopBitsOne,
                             0xFC, LittleEndian, ParityTypeNone, FlowControlHardware,
                             0x0020, 0x0020, "\\_SB.URT1",
                             0x00, ResourceConsumer, , Exclusive,
                             )
+                        */
                         GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
                             "\\_SB.GPO0", 0x00, ResourceConsumer, ,
                             )
