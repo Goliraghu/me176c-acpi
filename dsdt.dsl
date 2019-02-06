@@ -125,7 +125,10 @@ DefinitionBlock ("", "DSDT", 2, "ALASKA", "A M I ", 0x00000004)
     Name (TMF1, Zero)
     Name (TMF2, Zero)
     Name (TMF3, Zero)
-    OperationRegion (GNVS, SystemMemory, 0xDEADBEEF, 0x0340)
+
+    External (NVSA, IntObj)
+    LoadTable ("OEM6", "ME176C", "GNVS")
+    OperationRegion (GNVS, SystemMemory, NVSA, 0x0340)
     Field (GNVS, AnyAcc, Lock, Preserve)
     {
         OSYS,   16,
