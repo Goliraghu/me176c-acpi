@@ -1,4 +1,4 @@
-# me176c-acpi
+# me176c-acpi [![Build Status](https://travis-ci.com/me176c-dev/me176c-acpi.svg?branch=master)](https://travis-ci.com/me176c-dev/me176c-acpi)
 This repository contains a number of patches for the ACPI DSDT table of the ASUS MeMO Pad 7 (ME176C/CX).
 
 ## Introduction
