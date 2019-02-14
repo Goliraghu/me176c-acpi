@@ -1,0 +1,13 @@
+dist: xenial
+language: generic
+
+addons:
+  apt:
+    # iASL from Xenial is too old, use the one from Bionic
+    sources: [sourceline: 'deb http://us-east-1.ec2.archive.ubuntu.com/ubuntu/ bionic universe']
+    packages: [acpica-tools]
+
+script: iasl dsdt.dsl
+
+notifications:
+  email: false
