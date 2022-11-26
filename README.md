@@ -1,6 +1,10 @@
 # me176c-acpi [![Build Status](https://travis-ci.com/me176c-dev/me176c-acpi.svg?branch=master)](https://travis-ci.com/me176c-dev/me176c-acpi)
 This repository contains a number of patches for the ACPI DSDT table of the ASUS MeMO Pad 7 (ME176C/CX).
 
+**IMPORTANT NOTE:** The patches in this repository are no longer necessary to run properly on recent Linux kernel versions.
+Similar workarounds were integrated into the `x86-android-tablets` Linux kernel module that works without having to modify
+the ACPI tables.
+
 ## Introduction
 Unfortunately, ASUS decided to add workarounds to the kernel instead of fixing the ACPI tables using a BIOS update.
 Most of these workarounds are for the ACPI DSDT table, which contains information about the hardware of the tablet,
